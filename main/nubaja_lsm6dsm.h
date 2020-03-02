@@ -57,7 +57,7 @@ LSM6DSM init_lsm6dsm(int port_num, int slave_address)
   uint8_t ODR_G = 0x80;
   uint8_t FS_G = 0x04;
   uint8_t FS_125 = 0b0;
-  uint8_t CTRL2_G_CONFIG = (ODR_G | FS_G | FS_125);
+  uint8_t CTRL2_G_CONFIG =(ODR_G | FS_G | FS_125);
 
   i2c_write_byte(port_num, slave_address, CTRL1_XL, CTRL1_XL_CONFIG);
   i2c_write_byte(port_num, slave_address, CTRL8_XL, CTRL8_XL_CONFIG);

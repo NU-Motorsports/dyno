@@ -1,17 +1,17 @@
 #ifndef NUBAJA_PROJ_VARS_H_
 #define NUBAJA_PROJ_VARS_H_
 
-//timing
+// timing
 #define DAQ_TIMER_GROUP       	TIMER_GROUP_0  // group of daq timer
 #define DAQ_TIMER_IDX         	0              // index of daq timer
 #define DAQ_TIMER_HZ          	1           // frequency of the daq timer in Hz
 #define DAQ_TIMER_DIVIDER     	100
 
-//ctrl
-#define LAUNCH_THRESHOLD      	50 //% of throttle needed for launch
-#define BSIZE                 	100 //test length
+// ctrl
+#define LAUNCH_THRESHOLD      	50  // % of throttle needed for launch
+#define BSIZE                 	100  // test length
 
-//adc scales, offsets (physical quantity = scale*volts + offset)
+// adc scales, offsets (physical quantity = scale*volts + offset)
 #define TORQUE_SCALE 			15.6
 #define TORQUE_OFFSET 			0
 
@@ -29,25 +29,25 @@
 
 #define BREAK_IN_RPM			1800
 
-//fault thresholds
-#define MAX_I_BRAKE				2.4 //amps
-#define MAX_BELT_TEMP			150 //deg C
-#define MAX_CVT_AMBIENT 		100 //deg C
-#define MAX_BRAKE_TEMP			100 //deg C
+// fault thresholds
+#define MAX_I_BRAKE				2.4  // amps
+#define MAX_BELT_TEMP			150  // deg C
+#define MAX_CVT_AMBIENT 		100  // deg C
+#define MAX_BRAKE_TEMP			100  // deg C
 #define I_BRAKE_MAX           	3.6
 
-//PIDs
-#define	KP						0 
+// PIDs
+#define	KP						0
 #define	KI						0.5
 #define	KD						0
 #define	BRAKE_WINDUP_GUARD		10
 #define	BRAKE_OUTPUT_MAX		100
 
-//struct for consolidating various flags, key quantities, etc
-struct control 
+// struct for consolidating various flags, key quantities, etc
+struct control
 {
-	//flags
-	int en_eng; 
+	// flags
+	int en_eng;
 	int eng;
 	int run;
 	int num_profile;
@@ -55,17 +55,17 @@ struct control
 	int idx;
 	int en_log;
 
-	//quantities
-	float i_brake_amps; 
+	// quantities
+	float i_brake_amps;
 	float i_brake_duty;
 	float brake_temp;
 	float belt_temp;
 };
 typedef struct control control_t;
 
-//profiles
-float i_sp_accel_launch[BSIZE] = 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-						   			0, 100, 100, 99, 99, 99, 99, 98, 98, 98, 
+// profiles
+float i_sp_accel_launch[BSIZE] = 	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+						   			0, 100, 100, 99, 99, 99, 99, 98, 98, 98,
 						   			97, 97, 97, 96, 96, 96, 95, 95, 95, 94,
 						   			94, 94, 93, 93, 92, 92, 91, 91, 91, 90,
 						   			90, 89, 89, 88, 87, 87, 86, 86, 85, 85,
@@ -85,8 +85,8 @@ float i_sp_hill[BSIZE];
 
 float tps_sp_hill[BSIZE];
 
-float i_sp_test[BSIZE] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //0-.9
-						   0, 100, 100, 99, 99, 99, 99, 98, 98, 98, //1-1.9
+float i_sp_test[BSIZE] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  // 0-.9
+						   0, 100, 100, 99, 99, 99, 99, 98, 98, 98,  // 1-1.9
 						   97, 97, 97, 96, 96, 96, 95, 95, 95, 94,
 						   94, 94, 93, 93, 92, 92, 91, 91, 91, 90,
 						   90, 89, 89, 88, 87, 87, 86, 86, 85, 85,

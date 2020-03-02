@@ -60,14 +60,14 @@ end
 
 %analog value conversions
 for i = 1:num_rows
-    torque(i,1) = ( counts_to_volts ( torque(i,1) ) ) * torque_scale + torque_offset ;
-    temp3(i,1) = ( counts_to_volts ( temp3(i,1) ) ) * temp_scale + temp_offset; 
-    belt_temp(i,1) = ( counts_to_volts ( belt_temp(i,1) )) * belt_temp_scale + belt_temp_offset;
-    temp2(i,1) = ( counts_to_volts ( temp2(i,1) )) * temp_scale + temp_offset;
-    i_brake(i,1) = ( counts_to_volts ( i_brake(i,1) ) ) * i_brake_scale + i_brake_offset;
-    temp1(i,1) = ( counts_to_volts ( temp1(i,1) )) * temp_scale + temp_offset;
-    load_cell(i,1) = ( counts_to_volts ( load_cell(i,1) ) * load_cell_scale + load_cell_offset );
-    tps(i,1) = ( counts_to_volts ( tps(i,1) ) * tps_scale + tps_offset );
+    torque(i,1) = (counts_to_volts (torque(i,1))) * torque_scale + torque_offset ;
+    temp3(i,1) = (counts_to_volts (temp3(i,1))) * temp_scale + temp_offset; 
+    belt_temp(i,1) = (counts_to_volts (belt_temp(i,1))) * belt_temp_scale + belt_temp_offset;
+    temp2(i,1) = (counts_to_volts (temp2(i,1))) * temp_scale + temp_offset;
+    i_brake(i,1) = (counts_to_volts (i_brake(i,1))) * i_brake_scale + i_brake_offset;
+    temp1(i,1) = (counts_to_volts (temp1(i,1))) * temp_scale + temp_offset;
+    load_cell(i,1) = (counts_to_volts (load_cell(i,1)) * load_cell_scale + load_cell_offset);
+    tps(i,1) = (counts_to_volts (tps(i,1)) * tps_scale + tps_offset);
 end
 
 %calculate data
