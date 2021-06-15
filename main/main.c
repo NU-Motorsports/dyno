@@ -89,18 +89,18 @@ static void get_profile()
   switch (main_ctrl.num_profile)
   {
     case 1:
-      i_sp = i_sp_accel_launch;
-      tps_sp = tps_sp_accel_launch;
+      memcpy(i_sp, i_sp_accel_launch, sizeof(float)*BSIZE);
+      memcpy(tps_sp, tps_sp_accel_launch, sizeof(float)*BSIZE);
       break;
 
     case 2:
-      i_sp = i_sp_accel;
-      tps_sp = tps_sp_accel;
+      memcpy(i_sp, i_sp_accel, sizeof(float)*BSIZE);
+      memcpy(tps_sp, tps_sp_accel, sizeof(float)*BSIZE);
       break;
 
     case 3:
-      i_sp = i_sp_hill;
-      tps_sp = tps_sp_hill;
+      memcpy(i_sp, i_sp_hill, sizeof(float)*BSIZE);
+      memcpy(tps_sp, tps_sp_hill, sizeof(float)*BSIZE);
       break;
 
     case 4:
@@ -111,8 +111,8 @@ static void get_profile()
       break;
 
     case 5:
-      i_sp = i_sp_demo;
-      tps_sp = tps_sp_demo;
+      memcpy(i_sp, i_sp_demo, sizeof(float)*BSIZE);
+      memcpy(tps_sp, tps_sp_demo, sizeof(float)*BSIZE);
       break;
   }
 }
@@ -204,7 +204,7 @@ static void daq_task(void *arg)
 
     // check if test is done (profiles ended) or if test faulted
     // end disabled for break-in for continuous operation
-    if (((main_ctrl.idx == BSIZE) | (ctrl_faults.trip)) & (rl.num_profile != 4)) {
+    if (((main_ctrl.idx == BSIZE) | (ctrl_faults.trip)) & (main_ctrl.num_profile != 4)) {
         main_ctrl.run = 0;
     }
 
