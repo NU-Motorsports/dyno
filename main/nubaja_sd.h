@@ -129,6 +129,7 @@ void init_sd()
   printf("Enter output file num.\n");
   while (!file_num) {
     scanf("%d", &file_num);
+    vTaskDelay(10);
   }
   filename[13] = file_num + '0';
   printf("output filename: %s\n",filename);

@@ -84,6 +84,7 @@ static void get_profile()
   printf("Profile 5 - demo.\n");
   while (!main_ctrl.num_profile) {
     scanf("%d", &main_ctrl.num_profile);
+    vTaskDelay(10);
   }
 
   switch (main_ctrl.num_profile)
@@ -190,6 +191,7 @@ static void daq_task(void *arg)
   printf("1 = YES ; 0 = NO\n");
   while (!main_ctrl.eng) {
     scanf("%d\n", &main_ctrl.eng);
+    vTaskDelay(10);
   }
 
   flasher_on();
