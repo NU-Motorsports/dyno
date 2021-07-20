@@ -1,91 +1,72 @@
 #ifndef NUBAJA_GPIO_H_
 #define NUBAJA_GPIO_H_
 
-#include "freertos/queue.h"
-#include "freertos/event_groups.h"
 #include "driver/gpio.h"
+#include "freertos/event_groups.h"
+#include "freertos/queue.h"
 
-#define PRIMARY_GPIO          26             // engine rpm measurement
-#define SECONDARY_GPIO        27             // CVT secondary rpm measurement
-#define SOLENOID_GPIO         16             // e-brake release solenoid ***DIFFERENT FROM PCB RIGHT NOW - NEEDS REWORK**
-#define KILL_GPIO             33             // kill switch relay control
-#define FLASHER_GPIO          32             // flashing indicator relay control
-#define GPIO_INPUT_PIN_SEL    ((1ULL<<PRIMARY_GPIO) | (1ULL<<SECONDARY_GPIO))
-#define GPIO_OUTPUT_PIN_SEL   ((1ULL<<SOLENOID_GPIO) | (1ULL<<FLASHER_GPIO) | (1ULL<<KILL_GPIO))
+#define PRIMARY_GPIO   26 // engine rpm measurement
+#define SECONDARY_GPIO 27 // CVT secondary rpm measurement
+#define SOLENOID_GPIO                                                          \
+  16                          // e-brake release solenoid
+                              //***DIFFERENT FROM PCB RIGHT NOW - NEEDS REWORK**
+#define KILL_GPIO          33 // kill switch relay control
+#define FLASHER_GPIO       32 // flashing indicator relay control
+#define GPIO_INPUT_PIN_SEL ((1ULL << PRIMARY_GPIO) | (1ULL << SECONDARY_GPIO))
+#define GPIO_OUTPUT_PIN_SEL                                                    \
+  ((1ULL << SOLENOID_GPIO) | (1ULL << FLASHER_GPIO) | (1ULL << KILL_GPIO))
 
-#define RPM_TIMER_GROUP       TIMER_GROUP_1  // group of speed timer
-#define RPM_TIMER_IDX         0              // index of speed timer
-#define RPM_TIMER_DIVIDER     100            // speed timer prescale divider
+#define RPM_TIMER_GROUP   TIMER_GROUP_1 // group of speed timer
+#define RPM_TIMER_IDX     0             // index of speed timer
+#define RPM_TIMER_DIVIDER 100           // speed timer prescale divider
 
-#define MAX_PRIMARY_RPM       4200           // cut off wacky high errors. max engine rpm 3800
-#define MAX_SECONDARY_RPM     4500           // cut off wacky high errors. max sec rpm 3800 / 0.9 = ~4200
+#define MAX_PRIMARY_RPM 4200 // cut off wacky high errors. max engine rpm 3800
+#define MAX_SECONDARY_RPM                                                      \
+  4500 // cut off wacky high errors. max sec rpm 3800 / 0.9 = ~4200
 
-xQueueHandle primary_rpm_queue;                    // queue for engine rpm values
-xQueueHandle secondary_rpm_queue;                    // queue for wheel speed values
+xQueueHandle primary_rpm_queue;   // queue for engine rpm values
+xQueueHandle secondary_rpm_queue; // queue for wheel speed values
 
 double last_prim_rpm_time = 0;
 double last_sec_rpm_time = 0;
 
-void flasher_on()
-{
-  gpio_set_level(FLASHER_GPIO, 1);
-}
+void flasher_on() { gpio_set_level(FLASHER_GPIO, 1); }
 
-void flasher_off()
-{
-  gpio_set_level(FLASHER_GPIO, 0);
-}
+void flasher_off() { gpio_set_level(FLASHER_GPIO, 0); }
 
-void ebrake_set()
-{
-  gpio_set_level(SOLENOID_GPIO, 0);
-}
+void ebrake_set() { gpio_set_level(SOLENOID_GPIO, 0); }
 
-void ebrake_release()
-{
-  gpio_set_level(SOLENOID_GPIO, 1);
-}
+void ebrake_release() { gpio_set_level(SOLENOID_GPIO, 1); }
 
-void engine_off()
-{
-  gpio_set_level(KILL_GPIO, 1);
-}
+void engine_off() { gpio_set_level(KILL_GPIO, 1); }
 
-void engine_on()
-{
-  gpio_set_level(KILL_GPIO, 0);
-}
+void engine_on() { gpio_set_level(KILL_GPIO, 0); }
 
-static void secondary_isr_handler(void *arg)
-{
+static void secondary_isr_handler(void *arg) {
   double time;
   timer_get_counter_time_sec(RPM_TIMER_GROUP, RPM_TIMER_IDX, &time);
   uint16_t rpm = 60.0 / (time - last_sec_rpm_time);
 
-  if (rpm <= MAX_SECONDARY_RPM)
-  {
+  if (rpm <= MAX_SECONDARY_RPM) {
     xQueueOverwriteFromISR(secondary_rpm_queue, &rpm, NULL);
   }
 
   last_sec_rpm_time = time;
 }
 
-static void primary_isr_handler(void *arg)
-{
+static void primary_isr_handler(void *arg) {
   double time;
   timer_get_counter_time_sec(RPM_TIMER_GROUP, RPM_TIMER_IDX, &time);
   uint16_t rpm = 60.0 / (time - last_prim_rpm_time);
 
-  if (rpm <= MAX_PRIMARY_RPM)
-  {
+  if (rpm <= MAX_PRIMARY_RPM) {
     xQueueOverwriteFromISR(primary_rpm_queue, &rpm, NULL);
   }
 
   last_prim_rpm_time = time;
 }
 
-static void speed_timer_init()
-{
+static void speed_timer_init() {
   // select and initialize basic parameters of the timer
   timer_config_t config;
   config.divider = RPM_TIMER_DIVIDER;
@@ -103,8 +84,7 @@ static void speed_timer_init()
 }
 
 // configure gpio pins for input and ISRs, and the flasher pin for output
-void configure_gpio()
-{
+void configure_gpio() {
   // setup timer and queues for speeds
   speed_timer_init();
   primary_rpm_queue = xQueueCreate(1, sizeof(uint16_t));
@@ -112,21 +92,21 @@ void configure_gpio()
 
   // config rising-edge interrupt GPIO pins (primray, secondary RPM)
   gpio_config_t io_conf;
-  io_conf.intr_type = GPIO_PIN_INTR_POSEDGE;  // interrupt of rising edge
-  io_conf.pin_bit_mask = GPIO_INPUT_PIN_SEL;  // bit mask of the pins
-  io_conf.mode = GPIO_MODE_INPUT;  // set as input mode
+  io_conf.intr_type = GPIO_PIN_INTR_POSEDGE; // interrupt of rising edge
+  io_conf.pin_bit_mask = GPIO_INPUT_PIN_SEL; // bit mask of the pins
+  io_conf.mode = GPIO_MODE_INPUT;            // set as input mode
   io_conf.pull_up_en = GPIO_PULLUP_DISABLE;
   io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
   gpio_config(&io_conf);
 
   // congifure GPIO outputs
-  io_conf.pin_bit_mask = GPIO_OUTPUT_PIN_SEL;  // bit mask of the pins
+  io_conf.pin_bit_mask = GPIO_OUTPUT_PIN_SEL; // bit mask of the pins
   io_conf.intr_type = GPIO_PIN_INTR_DISABLE;  // interrupt of rising edge
-  io_conf.mode = GPIO_MODE_OUTPUT;  // set as input mode
+  io_conf.mode = GPIO_MODE_OUTPUT;            // set as input mode
   gpio_config(&io_conf);
 
   // ISRs
-  gpio_install_isr_service(0);  // install gpio isr service
+  gpio_install_isr_service(0); // install gpio isr service
   gpio_isr_handler_add(PRIMARY_GPIO, primary_isr_handler, NULL);
   gpio_isr_handler_add(SECONDARY_GPIO, secondary_isr_handler, NULL);
 
@@ -140,11 +120,11 @@ void configure_gpio()
   ebrake_set();
 }
 
-void rpm_log(QueueHandle_t queue, uint16_t* val)
-{
+void rpm_log(QueueHandle_t queue, uint16_t *val) {
   // uint16_t rst = 0;
   xQueuePeek(queue, val, 0);
-  // xQueueOverwrite(queue, &rst);  // overwrite queue to 0 to avoid repetitive values
+  // xQueueOverwrite(queue, &rst);  // overwrite queue to 0 to avoid repetitive
+  // values
 }
 
-#endif  // NUBAJA_GPIO_H_
+#endif // NUBAJA_GPIO_H_
