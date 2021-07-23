@@ -254,7 +254,7 @@ static void daq_task(void *arg) {
     // set_brake_duty(brake_current_pid.output);
     set_brake_duty(dp.i_sp);
 
-    // print_data_point(&dp);
+    print_data_point(&dp);
 
     // check for faults
     if (main_ctrl.i_brake_amps > MAX_I_BRAKE) {
@@ -268,8 +268,7 @@ static void daq_task(void *arg) {
     }
 
     // push struct to logging queue
-    // if the queue is full, switch queues and send the full for writing to
-    // SD
+    // if the queue is full, switch queues and send the full for writing to SD
     if (main_ctrl.en_log) {
       if (xQueueSend(current_logging_queue, &dp, 0) == errQUEUE_FULL) {
         printf("daq_task -- queue full, writing and switiching...\n");
