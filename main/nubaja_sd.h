@@ -72,6 +72,7 @@ static void write_logging_queue_to_sd(void *arg) {
   fp = fopen(filename, "a");
   if (fp == NULL) {
     printf("write_logging_queue_to_sd -- failed to create file\n");
+    xSemaphoreGive(write_lock);
     vTaskDelete(NULL);
   }
   fprintf(fp, "%s", buff);
