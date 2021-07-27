@@ -35,6 +35,7 @@ void i2c_master_config(int port_num, int clk, int sda, int scl) {
   conf.sda_pullup_en = GPIO_PULLUP_DISABLE;
   conf.scl_io_num = scl;
   conf.scl_pullup_en = GPIO_PULLUP_DISABLE;
+  conf.clk_flags = 0;
   conf.master.clk_speed = clk;
   i2c_param_config(port_num, &conf);
   i2c_driver_install(port_num, conf.mode, I2C_MASTER_RX_BUF_DISABLE,
