@@ -20,13 +20,13 @@ SemaphoreHandle_t write_lock = NULL;
 int file_num = 0;
 char filename[20] = "/sdcard/data_x.csv";
 
-typedef struct {
+typedef struct data_point {
   uint16_t prim_rpm, sec_rpm;
   uint16_t torque, temp3, belt_temp, temp2, temp1, load_cell, tps, i_brake;
   float i_sp, tps_sp;
-} data_point;
+} data_point_t;
 
-void print_data_point(data_point *dp) {
+void print_data_point(data_point_t *dp) {
   printf("prrpm:\t%" PRIu16 "\tserpm:\t%" PRIu16 "\ttrque:\t%" PRIu16 "\n"
          "temp3:\t%" PRIu16 "\tbtemp:\t%" PRIu16 "\ttemp2:\t%" PRIu16 "\n"
          "braki:\t%" PRIu16 "\ttemp1:\t%" PRIu16 "\tloadc:\t%" PRIu16 "\n"
@@ -45,7 +45,7 @@ static void write_logging_queue_to_sd(void *arg) {
   }
 
   xQueueHandle lq = (xQueueHandle)arg;
-  data_point dp;
+  data_point_t dp;
   // num fields * num chars for each value + comma / return
   // int16_t can be -35,xxx, so max 6 chars per val
   int line_size = (13 * 7) + 9; // THIS IS CRITICAL - DO NOT CHANGE

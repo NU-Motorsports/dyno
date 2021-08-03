@@ -143,7 +143,7 @@ static void daq_task(void *arg) {
   main_ctrl.brake_temp = 0;
   main_ctrl.belt_temp = 0;
 
-  data_point dp = {
+  data_point_t dp = {
       dp.prim_rpm = 0, dp.sec_rpm = 0,   dp.torque = 0,
       dp.temp3 = 0,    dp.belt_temp = 0, dp.temp2 = 0,
       dp.i_brake = 0,  dp.temp1 = 0,     dp.load_cell = 0,
@@ -315,12 +315,12 @@ static void daq_task(void *arg) {
 void app_main() {
   daq_timer_queue = xQueueCreate(1, sizeof(uint32_t));
 
-  logging_queue_1 = xQueueCreate(LOGGING_QUEUE_SIZE, sizeof(data_point));
-  logging_queue_2 = xQueueCreate(LOGGING_QUEUE_SIZE, sizeof(data_point));
+  logging_queue_1 = xQueueCreate(LOGGING_QUEUE_SIZE, sizeof(data_point_t));
+  logging_queue_2 = xQueueCreate(LOGGING_QUEUE_SIZE, sizeof(data_point_t));
 
   // setup current data point queue
-  current_dp_queue = xQueueCreate(1, sizeof(data_point));
-  data_point dp = {dp.prim_rpm = 0, dp.sec_rpm = 0,   dp.torque = 0,
+  current_dp_queue = xQueueCreate(1, sizeof(data_point_t));
+  data_point_t dp = {dp.prim_rpm = 0, dp.sec_rpm = 0,   dp.torque = 0,
                    dp.temp3 = 0,    dp.belt_temp = 0, dp.temp2 = 0,
                    dp.i_brake = 0,  dp.temp1 = 0,     dp.load_cell = 0,
                    dp.tps = 0,      dp.i_sp = 0,      dp.tps_sp = 0};

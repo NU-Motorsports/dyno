@@ -1,13 +1,12 @@
 #ifndef NUBAJA_FAULT_H_
 #define NUBAJA_FAULT_H_
 
-struct fault {
+typedef struct fault {
   int overcurrent_fault;
   int overtemp_fault;
   int overvolt_fault;
   int trip;
-};
-typedef struct fault fault_t;
+} fault_t;
 
 void clear_faults(fault_t *fault) {
   fault->overcurrent_fault = 0;

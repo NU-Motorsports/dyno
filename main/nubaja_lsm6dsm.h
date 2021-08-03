@@ -24,15 +24,15 @@
 #define IMU_XL_FS      16 // full scale: +/- 16 g's
 #define IMU_XL_SCALE   (IMU_XL_FS / 32767)
 
-typedef struct {
+typedef struct LSM6DSM {
   int port_num;
   int slave_address;
-} LSM6DSM;
+} LSM6DSM_t;
 
-// create and configure the LSM6DSM IMU
-LSM6DSM init_lsm6dsm(int port_num, int slave_address) {
-  printf("init_lsm6dsm -- configuring an LSM6DSM IMU on port %d\n", port_num);
-  LSM6DSM dev;
+// create and configure the LSM6DSM_t IMU
+LSM6DSM_t init_lsm6dsm(int port_num, int slave_address) {
+  printf("init_lsm6dsm -- configuring an LSM6DSM_t IMU on port %d\n", port_num);
+  LSM6DSM_t dev;
   dev.port_num = port_num;
   dev.slave_address = slave_address;
 
@@ -64,7 +64,7 @@ LSM6DSM init_lsm6dsm(int port_num, int slave_address) {
   return dev;
 }
 
-void imu_read_gyro_xl(LSM6DSM *dev, int16_t *gyro_x, int16_t *gyro_y,
+void imu_read_gyro_xl(LSM6DSM_t *dev, int16_t *gyro_x, int16_t *gyro_y,
                       int16_t *gyro_z, int16_t *xl_x, int16_t *xl_y,
                       int16_t *xl_z) {
   i2c_read_2_bytes_6_lh(dev->port_num, dev->slave_address, OUTX_L_G,

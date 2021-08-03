@@ -44,7 +44,7 @@
 #define BRAKE_OUTPUT_MAX   100
 
 // struct for consolidating various flags, key quantities, etc
-struct control {
+typedef struct control {
   // flags
   int en_eng;
   int eng;
@@ -59,8 +59,7 @@ struct control {
   float i_brake_duty;
   float brake_temp;
   float belt_temp;
-};
-typedef struct control control_t;
+} control_t;
 
 // profiles
 float i_sp_accel_launch[BSIZE] = {
