@@ -90,19 +90,27 @@ static void write_logging_queue_to_sd(void *arg) {
 void init_sd() {
   printf("init_sd -- configuring SD storage\n");
 
+  spi_bus_config_t bus_cfg = {.mosi_io_num = SD_MOSI,
+                              .miso_io_num = SD_MISO,
+                              .sclk_io_num = SD_CLK,
+                              .quadwp_io_num = -1,
+                              .quadhd_io_num = -1,
+                              .max_transfer_sz = 4000};
+
+  spi_bus_initialize(HSPI_HOST, &bus_cfg, 1);
+
   sdmmc_host_t host = SDSPI_HOST_DEFAULT();
 
-  sdspi_slot_config_t slot_config = SDSPI_SLOT_CONFIG_DEFAULT();
-  slot_config.gpio_miso = SD_MISO;
-  slot_config.gpio_mosi = SD_MOSI;
-  slot_config.gpio_sck = SD_CLK;
+  sdspi_device_config_t slot_config = SDSPI_DEVICE_CONFIG_DEFAULT();
   slot_config.gpio_cs = SD_CS;
 
-  esp_vfs_fat_sdmmc_mount_config_t mount_config = {
-      .format_if_mount_failed = true, .max_files = 5};
+  esp_vfs_fat_sdmmc_mount_config_t mount_config = {.format_if_mount_failed =
+                                                       true,
+                                                   .max_files = 5,
+                                                   .allocation_unit_size = 0};
 
   sdmmc_card_t *card;
-  esp_err_t ret = esp_vfs_fat_sdmmc_mount("/sdcard", &host, &slot_config,
+  esp_err_t ret = esp_vfs_fat_sdspi_mount("/sdcard", &host, &slot_config,
                                           &mount_config, &card);
   if (ret != ESP_OK) {
     if (ret == ESP_FAIL) {
