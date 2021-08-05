@@ -84,6 +84,10 @@ static void get_profile() {
   while (!main_ctrl.num_profile) {
     scanf("%d", &main_ctrl.num_profile);
     vTaskDelay(10);
+    if (main_ctrl.num_profile > 5) {
+      printf("Invalid profile number\n");
+      main_ctrl.num_profile = 0;
+    }
   }
 
   switch (main_ctrl.num_profile) {
@@ -321,9 +325,9 @@ void app_main() {
   // setup current data point queue
   current_dp_queue = xQueueCreate(1, sizeof(data_point_t));
   data_point_t dp = {dp.prim_rpm = 0, dp.sec_rpm = 0,   dp.torque = 0,
-                   dp.temp3 = 0,    dp.belt_temp = 0, dp.temp2 = 0,
-                   dp.i_brake = 0,  dp.temp1 = 0,     dp.load_cell = 0,
-                   dp.tps = 0,      dp.i_sp = 0,      dp.tps_sp = 0};
+                     dp.temp3 = 0,    dp.belt_temp = 0, dp.temp2 = 0,
+                     dp.i_brake = 0,  dp.temp1 = 0,     dp.load_cell = 0,
+                     dp.tps = 0,      dp.i_sp = 0,      dp.tps_sp = 0};
   xQueueOverwrite(current_dp_queue, &dp);
 
   // start daq timer and tasks
