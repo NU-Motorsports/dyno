@@ -48,7 +48,7 @@ void init_pid(pid_ctrl_t *pid, float kp, float ki, float kd, float windupGuard,
   pid->output = 0;
 
   // tuning parameters
-  pid->kp = 0;
+  pid->kp = kp;
   pid->ki = ki;
   pid->kd = kd;
 
