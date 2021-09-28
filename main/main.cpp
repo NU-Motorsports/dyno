@@ -5,9 +5,9 @@
 #include "freertos/queue.h"
 #include "freertos/task.h"
 #include "soc/timer_group_struct.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 #include "nubaja_ad7998.h"
 #include "nubaja_fault.h"

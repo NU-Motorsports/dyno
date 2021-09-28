@@ -8,7 +8,7 @@
 #include "esp_vfs_fat.h"
 #include "freertos/semphr.h"
 #include "sdmmc_cmd.h"
-#include <inttypes.h>
+#include <cstdint>
 
 #define SD_MISO 19
 #define SD_MOSI 18
