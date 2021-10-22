@@ -1,2 +1,2 @@
-idf_component_register(SRCS "nubaja_sd.c" "nubaja_i2c.c" "main.c"
+idf_component_register(SRCS "nubaja_as1115.c" "nubaja_sd.c" "nubaja_i2c.c" "main.c"
                     INCLUDE_DIRS "")
