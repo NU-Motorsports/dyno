@@ -27,39 +27,37 @@
 
 // configure one I2C module for operation as an I2C master with internal pullups
 // disabled
-extern void i2c_master_config(int port_num, int clk, int sda, int scl);
+void i2c_master_config(int port_num, int clk, int sda, int scl);
 
 // write a single byte of data to a register using I2C protocol
-extern int i2c_write_byte(int port_num, uint8_t slave_address, uint8_t reg,
-                          uint8_t data);
+int i2c_write_byte(int port_num, uint8_t slave_address, uint8_t reg,
+                   uint8_t data);
 
 // write two byte of data to a register using I2C protocol
-extern int i2c_write_2_byte(int port_num, uint8_t slave_address, uint8_t reg,
-                            uint8_t data_h, uint8_t data_l);
+int i2c_write_2_byte(int port_num, uint8_t slave_address, uint8_t reg,
+                     uint8_t data_h, uint8_t data_l);
 
 // write four bytes of data to four consecutive registers using I2C protocol
-extern int i2c_write_4_bytes(int port_num, uint8_t slave_address, uint8_t reg,
-                             uint8_t data_0, uint8_t data_1, uint8_t data_2,
-                             uint8_t data_3);
+int i2c_write_4_bytes(int port_num, uint8_t slave_address, uint8_t reg,
+                      uint8_t data_0, uint8_t data_1, uint8_t data_2,
+                      uint8_t data_3);
 
 // read one byte from the register of an I2C device
-extern int i2c_read_byte(int port_num, uint8_t slave_address, int reg,
-                         uint8_t *data);
+int i2c_read_byte(int port_num, uint8_t slave_address, int reg, uint8_t *data);
 
 // read two consecutive bytes from the register of an I2C device
-extern int i2c_read_2_bytes(int port_num, uint8_t slave_address, int reg,
-                            uint16_t *data);
+int i2c_read_2_bytes(int port_num, uint8_t slave_address, int reg,
+                     uint16_t *data);
 
 // read four consecutive pairs of 2 bytes from an I2C device
-extern int i2c_read_2_bytes_4(int port_num, uint8_t slave_address, int reg,
-                              uint16_t *data_0, uint16_t *data_1,
-                              uint16_t *data_2, uint16_t *data_3);
+int i2c_read_2_bytes_4(int port_num, uint8_t slave_address, int reg,
+                       uint16_t *data_0, uint16_t *data_1, uint16_t *data_2,
+                       uint16_t *data_3);
 
 // read eight consecutive pairs of 2 bytes from an I2C device
-extern int i2c_read_2_bytes_8(int port_num, uint8_t slave_address, int reg,
-                              uint16_t *data_0, uint16_t *data_1,
-                              uint16_t *data_2, uint16_t *data_3,
-                              uint16_t *data_4, uint16_t *data_5,
-                              uint16_t *data_6, uint16_t *data_7);
+int i2c_read_2_bytes_8(int port_num, uint8_t slave_address, int reg,
+                       uint16_t *data_0, uint16_t *data_1, uint16_t *data_2,
+                       uint16_t *data_3, uint16_t *data_4, uint16_t *data_5,
+                       uint16_t *data_6, uint16_t *data_7);
 
 #endif // NUBAJA_I2C_H_
