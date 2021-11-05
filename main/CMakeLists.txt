@@ -7,4 +7,5 @@ idf_component_register(SRCS
                        "nubaja_i2c.c" 
                        "nubaja_pid.c"
                        "nubaja_pwm.c"
+                       "nubaja_fault.c"
                        INCLUDE_DIRS "")
