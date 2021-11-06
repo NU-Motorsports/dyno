@@ -9,4 +9,5 @@ idf_component_register(SRCS
                        "nubaja_pwm.c"
                        "nubaja_fault.c"
                        "nubaja_proj_vars.c"
+                       "nubaja_gpio.c"
                        INCLUDE_DIRS "")
