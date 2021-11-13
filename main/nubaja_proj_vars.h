@@ -1,9 +1,11 @@
 #ifndef NUBAJA_PROJ_VARS_H_
 #define NUBAJA_PROJ_VARS_H_
 
+#include "driver/timer.h"
+
 // timing
 #define DAQ_TIMER_GROUP   TIMER_GROUP_0 // group of daq timer
-#define DAQ_TIMER_IDX     0             // index of daq timer
+constexpr timer_idx_t DAQ_TIMER_IDX = TIMER_0;           // index of daq timer
 #define DAQ_TIMER_HZ      1             // frequency of the daq timer in Hz
 #define DAQ_TIMER_DIVIDER 100
 

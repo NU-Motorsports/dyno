@@ -1,3 +1,12 @@
+#include "nubaja_ad7998.h"
+#include "nubaja_fault.h"
+#include "nubaja_gpio.h"
+#include "nubaja_i2c.h"
+#include "nubaja_pid.h"
+#include "nubaja_proj_vars.h"
+#include "nubaja_pwm.h"
+#include "nubaja_sd.h"
+
 #include "driver/periph_ctrl.h"
 #include "driver/timer.h"
 #include "esp_types.h"
@@ -8,15 +17,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-
-#include "nubaja_ad7998.h"
-#include "nubaja_fault.h"
-#include "nubaja_gpio.h"
-#include "nubaja_i2c.h"
-#include "nubaja_pid.h"
-#include "nubaja_proj_vars.h"
-#include "nubaja_pwm.h"
-#include "nubaja_sd.h"
 
 // globals
 xQueueHandle daq_timer_queue; // queue to time the daq task
@@ -316,7 +316,7 @@ static void daq_task(void *arg) {
 }
 
 // initialize the daq timer and start the daq task
-void app_main() {
+extern "C" void app_main(void) {
   daq_timer_queue = xQueueCreate(1, sizeof(uint32_t));
 
   logging_queue_1 = xQueueCreate(LOGGING_QUEUE_SIZE, sizeof(data_point_t));

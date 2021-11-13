@@ -1,5 +1,7 @@
 #include "nubaja_sd.h"
 
+#include <cinttypes>
+
 static SemaphoreHandle_t write_lock = NULL;
 static int file_num = 0;
 static char filename[20] = "/sdcard/data_x.csv";
@@ -73,7 +75,9 @@ void init_sd() {
                               .sclk_io_num = SD_CLK,
                               .quadwp_io_num = -1,
                               .quadhd_io_num = -1,
-                              .max_transfer_sz = 4000};
+                              .max_transfer_sz = 4000,
+                              .flags = 0,
+                              .intr_flags = 0};
 
   spi_bus_initialize(HSPI_HOST, &bus_cfg, 1);
 

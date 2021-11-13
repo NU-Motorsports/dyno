@@ -13,7 +13,7 @@
 #define SD_MISO 19
 #define SD_MOSI 18
 #define SD_CLK  14
-#define SD_CS   15
+constexpr gpio_num_t SD_CS = GPIO_NUM_15;
 
 #define LOGGING_QUEUE_SIZE 1000 // data logging queue size
 

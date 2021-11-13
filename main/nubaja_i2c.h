@@ -15,10 +15,10 @@
 #define READ_BIT                  I2C_MASTER_READ  // I2C master read
 #define ACK_CHECK_EN              0x1 // I2C master will check ack from slave
 #define ACK_CHECK_DIS             0x0 // I2C master will not check ack from slave
-#define ACK                       0x0 // I2C ack value
-#define NACK                      0x1 // I2C nack value
-#define DATA_LENGTH               1   // bytes
-#define I2C_TASK_LENGTH           1   // ms
+constexpr i2c_ack_type_t ACK = I2C_MASTER_NACK;  // I2C ack value
+constexpr i2c_ack_type_t NACK = I2C_MASTER_NACK; // I2C nack value
+#define DATA_LENGTH     1                        // bytes
+#define I2C_TASK_LENGTH 1                        // ms
 
 // return values
 #define I2C_SUCCESS      0

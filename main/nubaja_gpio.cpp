@@ -1,19 +1,27 @@
 #include "nubaja_gpio.h"
 
-#define PRIMARY_GPIO   26 // engine rpm measurement
-#define SECONDARY_GPIO 27 // CVT secondary rpm measurement
-#define SOLENOID_GPIO                                                          \
-  16                          // e-brake release solenoid
-                              //***DIFFERENT FROM PCB RIGHT NOW - NEEDS REWORK**
-#define KILL_GPIO          33 // kill switch relay control
-#define FLASHER_GPIO       32 // flashing indicator relay control
-#define GPIO_INPUT_PIN_SEL ((1ULL << PRIMARY_GPIO) | (1ULL << SECONDARY_GPIO))
-#define GPIO_OUTPUT_PIN_SEL                                                    \
-  ((1ULL << SOLENOID_GPIO) | (1ULL << FLASHER_GPIO) | (1ULL << KILL_GPIO))
+#define GPIO_DECLARE(NAME, NUMBER)                                             \
+  constexpr gpio_num_t NAME##_GPIO = GPIO_NUM_##NUMBER;                        \
+  constexpr uint64_t NAME##_GPIO_SEL = GPIO_SEL_##NUMBER
 
-#define RPM_TIMER_GROUP   TIMER_GROUP_1 // group of speed timer
-#define RPM_TIMER_IDX     0             // index of speed timer
-#define RPM_TIMER_DIVIDER 100           // speed timer prescale divider
+/// engine rpm measurement
+GPIO_DECLARE(PRIMARY, 26);
+/// CVT secondary rpm measurement
+GPIO_DECLARE(SECONDARY, 27);
+/// e-brake release solenoid
+///***DIFFERENT FROM PCB RIGHT NOW - NEEDS REWORK**
+GPIO_DECLARE(SOLENOID, 16);
+/// kill switch relay control
+GPIO_DECLARE(KILL, 33);
+/// flashing indicator relay control
+GPIO_DECLARE(FLASHER, 32);
+#define GPIO_INPUT_PIN_SEL (PRIMARY_GPIO_SEL | SECONDARY_GPIO_SEL)
+#define GPIO_OUTPUT_PIN_SEL                                                    \
+  (SOLENOID_GPIO_SEL | FLASHER_GPIO_SEL | KILL_GPIO_SEL)
+
+#define RPM_TIMER_GROUP TIMER_GROUP_1          // group of speed timer
+constexpr timer_idx_t RPM_TIMER_IDX = TIMER_0; // index of speed timer
+#define RPM_TIMER_DIVIDER 100                  // speed timer prescale divider
 
 // cut off wacky high errors. max engine rpm 3800
 #define MAX_PRIMARY_RPM 4200
@@ -87,7 +95,7 @@ void configure_gpio() {
 
   // config rising-edge interrupt GPIO pins (primray, secondary RPM)
   gpio_config_t io_conf;
-  io_conf.intr_type = GPIO_PIN_INTR_POSEDGE; // interrupt of rising edge
+  io_conf.intr_type = GPIO_INTR_POSEDGE; // interrupt of rising edge
   io_conf.pin_bit_mask = GPIO_INPUT_PIN_SEL; // bit mask of the pins
   io_conf.mode = GPIO_MODE_INPUT;            // set as input mode
   io_conf.pull_up_en = GPIO_PULLUP_DISABLE;
@@ -96,7 +104,7 @@ void configure_gpio() {
 
   // congifure GPIO outputs
   io_conf.pin_bit_mask = GPIO_OUTPUT_PIN_SEL; // bit mask of the pins
-  io_conf.intr_type = GPIO_PIN_INTR_DISABLE;  // interrupt of rising edge
+  io_conf.intr_type = GPIO_INTR_DISABLE;  // interrupt of rising edge
   io_conf.mode = GPIO_MODE_OUTPUT;            // set as input mode
   gpio_config(&io_conf);
 
