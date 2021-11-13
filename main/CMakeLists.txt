@@ -1,2 +1,13 @@
-idf_component_register(SRCS "main.cpp"
-                    INCLUDE_DIRS "")
+idf_component_register(SRCS 
+                       "main.cpp"
+                       "nubaja_lsm6dsm.c"
+                       "nubaja_ad7998.c"
+                       "nubaja_as1115.c" 
+                       "nubaja_sd.c" 
+                       "nubaja_i2c.c" 
+                       "nubaja_pid.c"
+                       "nubaja_pwm.c"
+                       "nubaja_fault.c"
+                       "nubaja_proj_vars.c"
+                       "nubaja_gpio.c"
+                       INCLUDE_DIRS "")
